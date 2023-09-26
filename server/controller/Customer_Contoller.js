@@ -35,7 +35,26 @@ exports.login = async function (req, res, next) {
   //     to: process.env.PERSONAL_PHONE_NUMBER || `+91${login?.phoneno}`,
   //   })
   //   .then((message) => {
-    console.log(otp);
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    secure: true,
+    auth: {
+      user: process.env.NODEMAILER_EMAIL,
+      pass: process.env.NODEMAILER_PASSWORD,
+    },
+  });
+  const mailOptions = {
+    from: process.env.NODEMAILER_EMAIL,
+    to: login.email,
+    subject: "Password Reset OTP",
+    text: `Your OTP for two factor authencation is: ${otp}`,
+  };
+  transporter.sendMail(mailOptions, function (error) {
+    if (error) {
+      console.log(error);
+    } else {
+
+      console.log(otp);
       if (login) {
         req.session.user = {
           username: "divyesh",
@@ -67,10 +86,11 @@ exports.login = async function (req, res, next) {
       } else {
         res.render("layout/login", { error: "Invalid email or password." });
       }
-    
-    // .catch((error) => {
-    //   console.error('Error sending OTP:', error);
-    // });
+    }
+  });
+  // .catch((error) => {
+  //   console.error('Error sending OTP:', error);
+  // });
 
 
 };
@@ -334,7 +354,7 @@ exports.forgotpassowrd = async function (req, res, next) {
   req.session.user = {
     username: "divyesh"
   };
-  res.render("layout/emailsend", { error: null });
+  res.render("layout/emailsend", { error: null, dataSiteKey: process.env.RECAPTCHA_SITE_KEY });
 };
 
 exports.emailsend = async function (req, res, next) {
