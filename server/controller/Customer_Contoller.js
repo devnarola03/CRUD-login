@@ -27,14 +27,15 @@ exports.login = async function (req, res, next) {
   });
 
   const otp = Math.floor(1000 + Math.random() * 9000);
-  const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
-  client.messages
-    .create({
-      body: `Your OTP is: ${otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: process.env.PERSONAL_PHONE_NUMBER || `+91${login?.phoneno}`,
-    })
-    .then((message) => {
+  // const client = twilio(process.env.ACCOUNT_SID, process.env.AUTH_TOKEN);
+  // client.messages
+  //   .create({
+  //     body: `Your OTP is: ${otp}`,
+  //     from: process.env.TWILIO_PHONE_NUMBER,
+  //     to: process.env.PERSONAL_PHONE_NUMBER || `+91${login?.phoneno}`,
+  //   })
+  //   .then((message) => {
+    console.log(otp);
       if (login) {
         req.session.user = {
           username: "divyesh",
@@ -66,10 +67,10 @@ exports.login = async function (req, res, next) {
       } else {
         res.render("layout/login", { error: "Invalid email or password." });
       }
-    })
-    .catch((error) => {
-      console.error('Error sending OTP:', error);
-    });
+    
+    // .catch((error) => {
+    //   console.error('Error sending OTP:', error);
+    // });
 
 
 };
