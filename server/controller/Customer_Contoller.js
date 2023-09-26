@@ -74,7 +74,7 @@ exports.login = async function (req, res, next) {
           from: process.env.NODEMAILER_EMAIL,
           to: login?.email,
           subject: "Login Successfully",
-          text: `Congratulations! You have successfully logged in to your account.\n\nWelcome back, ${login.firstname} ${login.lastname}!`,
+          text: `Congratulations! You have successfully logged in to your account.\n\nand Enter Two factor authcation .\n\nWelcome back, ${login.firstname} ${login.lastname}!`,
 
         };
         transporter.sendMail(mailOptions, function (error) {
