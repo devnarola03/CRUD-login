@@ -1,0 +1,120 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <span>
+    <h1 class="h2 ">Staff</h1>
+  </span>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button class="btn btn-sm btn-outline-secondary">?</button>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="table-responsive">
+  <table class="table table-striped table-sm table-hover">
+    <thead>
+      <tr>
+        <th> <a href="?&sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=firstname "
+            class="text-dark text-decoration-none">First Name</a>
+          <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+          </i>
+        </th>
+        <th>
+          <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=lastname" class="text-dark text-decoration-none">
+            Last Name </a>
+          <% if(sortby==='lastname' ) { %>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            <% } %>
+        </th>
+        <th> <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=email" class="text-dark text-decoration-none">
+            Email </a>
+          <% if(sortby==='email' ) { %>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            <% } %>
+        </th>
+        <th> <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=role" class="text-dark text-decoration-none">
+            Role </a>
+          <% if(sortby==='role' ) { %>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            <% } %>
+        </th>
+        <th> <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=status"
+            class="text-dark text-decoration-none"> Status </a>
+          <% if(sortby==='status' ) { %>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            <% } %>
+        </th>
+        <th><a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=createdon"
+            class="text-dark text-decoration-none"> Created on </a>
+          <% if(sortby==='createdon' ) { %>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            <% } %>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% customers.forEach(element=> { %>
+        <tr class="align-middle">
+          <td>
+            <%=element.firstname%>
+          </td>
+          <td>
+            <%=element.lastname%>
+          </td>
+          <td>
+            <%=element.email%>
+          </td>
+          <td>
+            <%=element.role%>
+          </td>
+          <td>
+            <%=element.status%>
+          </td>
+          <td>
+            <%= new Date(element.createdAt).toLocaleString(undefined, {dateStyle: 'short' , timeStyle: 'short' }) %>
+          </td>
+
+        </tr>
+        <% }) %>
+    </tbody>
+  </table>
+</div>
+
+<% if(customers.length> 0 ){ %>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center mt-2">
+      <% if(current==1){ %>
+        <li class="page-item disabled"><a class="page-link" href="#">FIRST</a></li>
+        <% } else { %>
+          <li class="page-item "><a class="page-link" href="?page=1">FIRST</a></li>
+          <% } %>
+
+            <% var i=(Number(current)> 5 ? Number(current)-4 :1) %>
+              <% if (i!==1) { %>
+                <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                <% } %>
+
+                  <% for( ; i <=(Number(current)+4) && i<=pages ; i++ ) { %>
+                    <% if (i==current) { %>
+                      <li class="page-item disabled"><a class="page-link" href="#">
+                          <%= i %>
+                        </a></li>
+                      <% } else { %>
+                        <li class="page-item "><a class="page-link" href="?&page=<%= i %>">
+                            <%= i %>
+                          </a></li>
+                        <% } %>
+                          <% if (i==(Number(current)+4) && i<=pages ) { %>
+                            <li class="page-item disabled"><a class="page-link" href="#">...</a></li>
+                            <% } %>
+                              <% } %>
+
+                                <% if (pages==current) { %>
+                                  <li class="page-item disabled "><a class="page-link" href="#">LAST</a></li>
+                                  <% } else { %>
+                                    <li class="page-item "><a class="page-link" href="?page=<%= pages %>">LAST</a></li>
+                                    <% } %>
+    </ul>
+  </nav>
+  <% } %>

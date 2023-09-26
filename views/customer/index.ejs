@@ -1,0 +1,297 @@
+<!-- <script>
+  const firstname = '< %= firstname %>';
+  const lastname = '< %= lastname %>';
+
+
+
+  const storedFirstname = localStorage.getItem('firstname');
+  const storedLastname = localStorage.getItem('lastname');
+  const templateVars = {
+    firstname: storedFirstname,
+    lastname: storedLastname
+  };
+  if (localStorage.getItem('lastname') === null) {
+  localStorage.setItem('firstname', templateVars.firstname);
+  localStorage.setItem('lastname', templateVars.lastname);
+}
+  console.log(storedFirstname, storedLastname);
+</script> -->
+<% if (error) { %>
+  <div id="error-message" class="alert alert-danger alert-dismissible fade show d-print-flex" role="alert">
+    <%= error %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <script>
+    setTimeout(function() {
+      document.getElementById('error-message').remove();
+    }, 10000); // Remove the error message after 10 seconds (10000 milliseconds)
+  </script>
+<% } %>
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <span>
+    <h1 class="h2">Welcome, <%= firstname %> <%= lastname %> </h1></span>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <a href="/add" class="btn btn-sm btn-outline-secondary">Add New Customer</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <div class="row card-body w-100">
+    <form method="get" action="/home?searchterm=<%=searchterm%>&perpage=<%=perpage%>">
+      <div class="row form-group">
+        <div class="col">
+          <input class="form-control w-100" type="text" placeholder="Search..." name="searchterm">
+        </div>
+        <div class="col input-group ">
+          <select class="form-select" id="inputGroupSelect01" name="perpage">
+            <option selected disabled> Per Page Record...</option>
+            <option class="dropdown-item" value="10">10</option>
+            <option class="dropdown-item" value="20">20</option>
+            <option class="dropdown-item" value="30">30</option>
+          </select>
+        </div>
+    </form>
+    <div class="col d-flex justify-content-end">
+      <button type="submit" class="btn btn-primary btn-small me-3">Submit</button>
+      <a href="/home" type="reset" class="btn btn-danger $blue-900      btn-small m-0">Reset</a>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<% if (searchterm.length> 0 ) { %>
+  <div class="table-responsive">
+    <table class="table table-striped table-sm table-hover">
+      <thead>
+        <tr>
+          <th> <a
+              href="/home?&sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=firstname&perpage=<%= perpage %>&searchterm=<%= searchterm %> "
+              class="text-dark text-decoration-none">First Name</a>
+            <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+            </i>
+          </th>
+          <th>
+            <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=lastname&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+              class="text-dark text-decoration-none">Last Name</a>
+            <% if(sortby==='lastname' ) { %>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              <% } %>
+          </th>
+          <th> <a
+              href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=email&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+              class="text-dark text-decoration-none">
+              Email </a>
+            <% if(sortby==='email' ) { %>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              <% } %>
+          </th>
+          <th> <a
+              href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=role&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+              class="text-dark text-decoration-none">
+              Role </a>
+            <% if(sortby==='role' ) { %>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              <% } %>
+          </th>
+          <th> <a
+              href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=status&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+              class="text-dark text-decoration-none"> Status </a>
+            <% if(sortby==='status' ) { %>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              <% } %>
+          </th>
+          <th><a
+              href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=createdon&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+              class="text-dark text-decoration-none text-center"> Created on </a>
+            <% if(sortby==='createdon' ) { %>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              <% } %>
+          </th>
+          <th class="text-center ms-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% customers.forEach(element=> { %>
+          <tr class="align-middle">
+            <td>
+              <%=element.firstname%>
+            </td>
+            <td>
+              <%=element.lastname%>
+            </td>
+            <td>
+              <%=element.email%>
+            </td>
+            <td>
+              <%=element.role%>
+            </td>
+            <td>
+              <%=element.status%>
+            </td>
+            <td>
+              <%= new Date(element.createdAt).toLocaleString(undefined, {dateStyle: 'short' , timeStyle: 'short' }) %>
+            </td>
+            <td class="align-items-center">
+              <div class="d-flex flex-row justify-content-end gap-2">
+                <a href="/view/<%=element._id%>" type="button" class="btn btn-primary btn-small"><i
+                    class="bi bi-eye"></i></a>
+
+                <a href="/edit/<%=element._id%>" type="button" class="btn btn-warning btn-small"> <i
+                    class="bi bi-pencil"></i></i></a>
+
+                <form action="/delete/<%=element._id%>" method="POST"
+                  onsubmit="return confirm('<%=element.firstname%> <%=element.lastname%> Are you sure you want to delete this record?')">
+                  <button type="submit" class="btn btn-danger btn-small">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </form>
+
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <% } else { %>
+    <div class="table-responsive">
+      <table class="table table-striped table-sm table-hover">
+        <thead>
+          <tr>
+            <th> <a
+                href="/home?&sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=firstname&perpage=<%= perpage %>&searchterm=<%= searchterm %> "
+                class="text-dark text-decoration-none">First Name</a>
+              <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+              </i>
+            </th>
+            <th>
+              <a href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=lastname&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+                class="text-dark text-decoration-none">Last Name</a>
+              <% if(sortby==='lastname' ) { %>
+                <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+                <% } %>
+            </th>
+            <th> <a
+                href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=email&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+                class="text-dark text-decoration-none">
+                Email </a>
+              <% if(sortby==='email' ) { %>
+                <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+                <% } %>
+            </th>
+            <th> <a
+                href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=role&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+                class="text-dark text-decoration-none">
+                Role </a>
+              <% if(sortby==='role' ) { %>
+                <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+                <% } %>
+            </th>
+            <th> <a
+                href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=status&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+                class="text-dark text-decoration-none"> Status </a>
+              <% if(sortby==='status' ) { %>
+                <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+                <% } %>
+            </th>
+            <th><a
+                href="?sort=<%= sort === 'asc' ? 'desc' : 'asc' %>&sortby=createdon&perpage=<%= perpage %>&searchterm=<%= searchterm %>"
+                class="text-dark text-decoration-none"> Created on </a>
+              <% if(sortby==='createdon' ) { %>
+                <i class="bi bi-arrow-<%= sort === 'asc' ? 'down' : 'up' %>"></i>
+                <% } %>
+            </th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% customers.forEach(element=> { %>
+            <tr class="align-middle">
+              <td>
+                <%=element.firstname%>
+              </td>
+              <td>
+                <%=element.lastname%>
+              </td>
+              <td>
+                <%=element.email%>
+              </td>
+              <td>
+                <%=element.role%>
+              </td>
+              <td>
+                <%=element.status%>
+              </td>
+              <td>
+                <%= new Date(element.createdAt).toLocaleString(undefined, {dateStyle: 'short' , timeStyle: 'short' }) %>
+              </td>
+              <td>
+                <div class="d-flex flex-row justify-content-end gap-2">
+                  <a href="/view/<%=element._id%>" type="button" class="btn btn-primary btn-small"><i
+                      class="bi bi-eye"></i></a>
+
+                  <a href="/edit/<%=element._id%>" type="button" class="btn btn-warning btn-small"> <i
+                      class="bi bi-pencil"></i></i></a>
+
+                  <form action="/delete/<%=element._id%>" method="POST"
+                    onsubmit="return confirm('<%=element.firstname%> <%=element.lastname%> Are you sure you want to delete this record?')">
+                    <button type="submit" class="btn btn-danger btn-small">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+
+                </div>
+              </td>
+            </tr>
+            <% }) %>
+        </tbody>
+      </table>
+    </div>
+    <% } %>
+
+
+
+
+      <% if (pages> 1) { %>
+        <nav aria-label="Page navigation example">
+          <ul class="pagination  justify-content-center mt-2">
+            <% if (current> 1) { %>
+              <li class="page-item"><a class="page-link"
+                  href="?page=1&perpage=<%= perpage %>&searchterm=<%= searchterm %>">First</a></li>
+              <li class="page-item"><a class="page-link"
+                  href="?page=<%= current - 1 %>&perpage=<%= perpage %>&searchterm=<%= searchterm %>">Previous</a></li>
+              <% } %>
+
+                <% for (let i=1; i <=pages; i++) { %>
+                  <% if (i===current) { %>
+                    <li class="page-item active"><a class="page-link"
+                        href="?page=<%= i %>&perpage=<%= perpage %>&searchterm=<%= searchterm %>&sort=<%= sort === 'asc' ? 'desc' : 'asc' %>">
+                        <%= i %>
+                      </a>
+                    </li>
+                    <% } else { %>
+                      <li class="page-item"><a class="page-link"
+                          href="?page=<%= i %>&perpage=<%= perpage %>&searchterm=<%= searchterm %>&sort=<%= sort === 'asc' ? 'desc' : 'asc' %>">
+                          <%= i %>
+                        </a></li>
+                      <% } %>
+                        <% } %>
+
+                          <% if (current < pages) { %>
+                            <li class="page-item"><a class="page-link"
+                                href="?page=<%= current + 1 %>&perpage=<%= perpage %>&searchterm=<%= searchterm %>">Next</a>
+                            </li>
+                            <li class="page-item"><a class="page-link"
+                                href="?page=<%= pages %>&perpage=<%= perpage %>&searchterm=<%= searchterm %>">Last</a>
+                            </li>
+                            <% } %>
+          </ul>
+        </nav>
+        <% } %>
+
+        

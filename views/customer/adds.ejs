@@ -1,0 +1,186 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <span>
+        <h1 class="h2 ">New Customer</h1>
+    </span>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button class="btn btn-sm btn-outline-secondary">?</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="col py-3">
+    <div class="row">
+        <div class="col">
+
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/home">Customers</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">New Customer</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="col text-end fw-lighter">
+            <b>User Id</b>
+        </div>
+    </div>
+</div>
+
+
+
+<form action="/add" method="post">
+    <div class="row form-group mb-4">
+        <div class="col">
+            <label for="firstname">First Name*</label>
+            <input type="text" class="form-control" name="fname" id="fname" placeholder="Enter First Name">
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Enter First Name' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+        <div class="col">
+            <label for="lastname">Last Name*</label>
+            <input type="text" class="form-control" name="lname" id="lname" placeholder="Enter Last Name">
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Enter Last Name' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group mb-4">
+        <div class="col">
+            <label for="email">E-mail*</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Enter E-mail">
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Email is not valid' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+        <div class="col">
+            <label for="role">Role*</label>
+            <select class="form-select" aria-label="Default select example" name="role">
+                <option selected disabled> Open this select menu</option>
+                <option value="Management">Management</option>
+                <option value="Staff">Staff</option>
+            </select>
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Role is not valid' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group mb-4">
+        <div class="col">
+            <label for="Password">Password*</label>
+            <input type="Password" class="form-control" name="password" id="Password" placeholder="Enter Password">
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='This password must be 6+ characters long' ) { %>
+                            <strong style="color: red;font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+        <div class="col">
+            <label for="confirmpassword">Confirm-Password*</label>
+            <input type="confirmpassword" class="form-control" name="confirmpassword" id="confirmpassword"
+                placeholder="Enter Confirm-password">
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Passwords must be the same' ) { %>
+                            <strong style="color: red;     font-size: 13px; ">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group mb-4">
+        <div class="col">
+            <label for="Status">Status*</label>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="status" id="flexRadioDefault1" value="Active">
+                <label class="form-check-label" for="flexRadioDefault1"> Active </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="Inactive">
+                <label class="form-check-label" for="flexRadioDefault2">Inactive</label>
+            </div>
+            <span class="error">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='Enter Status' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+        <div class="col">
+            <label for="phoneno">Phone no*</label>
+            <input type="number" class="form-control" name="phoneno" id="phoneno" placeholder="Enter phone no">
+            <span class="phone no">
+
+                <% if(typeof alert !='undefined' ) { %>
+                    <% alert.forEach(function(error) { %>
+                        <% if(error.msg==='phone no is not valid(10 digit)' ) { %>
+                            <strong style="color: red;     font-size: 13px;">
+                                <%= error.msg %>
+                            </strong>
+                            <% } %>
+                                <% }) %>
+                                    <% } %>
+            </span>
+        </div>
+    </div>
+    <div class="form-group mb-4">
+        <button type="submit" class="btn btn-primary"> Add </button>
+        <a href="/home" class="btn btn-danger">Cancel</a>
+
+    </div>
+</form>

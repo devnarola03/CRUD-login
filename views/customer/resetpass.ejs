@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+  <span>
+    <h1 class="h2 ">Reset Password</h1>
+  </span>
+  <div class="btn-toolbar mb-2 mb-md-0">
+    <div class="btn-group me-2">
+      <button class="btn btn-sm btn-outline-secondary">?</button>
+
+    </div>
+  </div>
+</div>
+
+<div class="col py-3">
+  <div class="row">
+    <div class="col">
+
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/home">Customers</a></li>
+          <li class="breadcrumb-item"><a href="/profile">Profile</a> : <%= firstname %> <%= lastname %> </li>
+          <li class="breadcrumb-item active" aria-current="page">Reset Password</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col text-end fw-lighter">
+      <b>User Id</b>
+    </div>
+  </div>
+</div>
+
+<form action="/profileresetpassword" method="post">
+  <div class="form-group ">
+
+    <div class="form-floating my-3 ">
+      <input type="password" class="form-control" id="floatingPassword"  name="oldpassword" placeholder=" " required>
+      <label for="floatingPassword">Old Password</label>
+    </div>
+    <div class="form-floating my-3 ">
+      <input type="password" class="form-control" id="floatingPassword" minlength="6" name="newpassword" placeholder=" " required>
+      <label for="floatingPassword">New Password</label>
+    </div>
+    <div class="form-floating my-3 ">
+      <input type="password" class="form-control" id="floatingPassword" minlength="6" name="connewpassword" placeholder=" " required>
+      <label for="floatingPassword">Confirm New-Password</label>
+      <button type="submit" class="btn btn-primary mt-3">Submit</button>
+      <!-- <button type="submit" class="btn btn-primary mt-3">Back to Profile</button>    -->
+      <a href="/profile" class="btn btn-danger mt-3 ms-2">Back to Profile</a>
+      
+    </div>
+</form>
+<% if (error) { %>
+  <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <%= error %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  <% } %>
