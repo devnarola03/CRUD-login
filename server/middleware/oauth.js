@@ -11,7 +11,7 @@ passport.use(
         {
             clientID: process.env.OAUTH_CLIENT_ID,
             clientSecret: process.env.OAUTH_SECRET_KEY,
-            callbackURL: 'http://localhost:3000/2fa',
+            callbackURL: 'https://auth-node-app.onrender.com/2fa',
         },
         function (accessToken, refreshToken, profile, done) {
             userProfile = profile;
