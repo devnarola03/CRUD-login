@@ -16,7 +16,7 @@ exports.loginpage = async function (req, res, next) {
     if (err) {
       console.log(err);
     }
-    res.render("layout/login", { error });
+    res.render("layout/login", { error, OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID });
   });
 };
 
@@ -35,64 +35,36 @@ exports.login = async function (req, res, next) {
   //     to: process.env.PERSONAL_PHONE_NUMBER || `+91${login?.phoneno}`,
   //   })
   //   .then((message) => {
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    secure: true,
-    auth: {
-      user: process.env.NODEMAILER_EMAIL,
-      pass: process.env.NODEMAILER_PASSWORD,
-    },
-  });
-  const mailOptions = {
-    from: process.env.NODEMAILER_EMAIL,
-    to: login.email,
-    subject: "Password Reset OTP",
-    text: `Your OTP for two factor authencation is: ${otp}`,
-  };
-  transporter.sendMail(mailOptions, function (error) {
-    if (error) {
-      console.log(error);
-    } else {
-
-      console.log(otp);
-      if (login) {
-        req.session.user = {
-          username: "divyesh",
-          login,
-          otp: otp
-        };
-        res.redirect("/2fa");
-        const transporter = nodemailer.createTransport({
-          service: "gmail",
-          secure: true,
-          auth: {
-            user: process.env.NODEMAILER_EMAIL,
-            pass: process.env.NODEMAILER_PASSWORD,
-          },
-        });
-        const mailOptions = {
-          from: process.env.NODEMAILER_EMAIL,
-          to: login?.email,
-          subject: "Login Successfully",
-          text: `Congratulations! You have successfully logged in to your account.\n\nand Enter Two factor authcation .\n\nWelcome back, ${login.firstname} ${login.lastname}!`,
-
-        };
-        transporter.sendMail(mailOptions, function (error) {
-          if (error) {
-            console.log(error);
-          } else {
-          }
-        });
+  if (login) {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: true,
+      auth: {
+        user: process.env.NODEMAILER_EMAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
+      },
+    });
+    const mailOptions = {
+      from: process.env.NODEMAILER_EMAIL,
+      to: login?.email,
+      subject: "Password Reset OTP",
+      text: `Your OTP for Two factor authciation is: ${otp}`,
+    };
+    transporter.sendMail(mailOptions, function (error) {
+      if (error) {
+        console.log(error);
       } else {
-        res.render("layout/login", { error: "Invalid email or password." });
+        req.session.user = { username: "divyesh", login, otp: otp };
+        res.redirect("/2fa");
       }
-    }
-  });
+    });
+  } else {
+    res.render("layout/login", { error: "Invalid email or password.", OAUTH_CLIENT_ID: process.env.OAUTH_CLIENT_ID });
+  }
+  // })
   // .catch((error) => {
   //   console.error('Error sending OTP:', error);
   // });
-
-
 };
 
 exports.homepage = async function (req, res, next) {
@@ -160,6 +132,7 @@ exports.postcustomer = async function (req, res, next) {
   } else {
     try {
       const token = jwt.sign({ foo: "bar" }, "shhhhh");
+
       req.body.token = token;
       const firstName =
         req.body.fname.charAt(0).toUpperCase() + req.body.fname.slice(1);
@@ -175,8 +148,7 @@ exports.postcustomer = async function (req, res, next) {
         status: req.body.status,
         password: req.body.password,
         confirmpassword: req.body.confirmpassword,
-        token: token,
-
+        token: token
       });
       await customer.create(newcustomer);
       res.redirect("/home");
@@ -354,7 +326,7 @@ exports.forgotpassowrd = async function (req, res, next) {
   req.session.user = {
     username: "divyesh"
   };
-  res.render("layout/emailsend", { error: null, dataSiteKey: process.env.RECAPTCHA_SITE_KEY });
+  res.render("layout/emailsend", { error: null, dataSiteKey: process.env.RECAPTCHA_SITE_KEY});
 };
 
 exports.emailsend = async function (req, res, next) {
@@ -408,12 +380,32 @@ exports.fa = async function (req, res, next) {
     const login = req?.session?.user?.login
     const responseKey = req.body["g-recaptcha-response"];
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
-
     const verificationUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${responseKey}`;
 
     const { data } = await axios.post(verificationUrl);
     if (data.success) {
       if (parseInt(req?.session?.user?.otp) === parseInt(req?.body?.otp)) {
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          secure: true,
+          auth: {
+            user: process.env.NODEMAILER_EMAIL,
+            pass: process.env.NODEMAILER_PASSWORD,
+          },
+        });
+        const mailOptions = {
+          from: process.env.NODEMAILER_EMAIL,
+          to: login?.email,
+          subject: "Login Successfully",
+          text: `Congratulations! You have successfully logged in to your account.\n\nWelcome back, ${login.firstname} ${login.lastname}!`,
+
+        };
+        transporter.sendMail(mailOptions, function (error) {
+          if (error) {
+            console.log(error);
+          } else {
+          }
+        });
         if (login.role == "Management") {
           req.session.user = {
             id: login._id,
@@ -444,6 +436,38 @@ exports.fa = async function (req, res, next) {
     } else {
       res.render("layout/2fa", { error: 'Enter reCAPTCHA verification.', email: login?.email, dataSiteKey: process.env.RECAPTCHA_SITE_KEY });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+exports.resendotps = async function (req, res, next) {
+  console.log("login,req.body");
+  try {
+    const login = req?.session?.user?.login
+    let otp = Math.floor(Math.random() * 10000 + 1);
+    req.session.user = { otp: otp };
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      secure: true,
+      auth: {
+        user: process.env.NODEMAILER_EMAIL,
+        pass: process.env.NODEMAILER_PASSWORD,
+      },
+    });
+    const mailOptions = {
+      from: process.env.NODEMAILER_EMAIL,
+      to: login.email,
+      subject: "Password Reset OTP",
+      text: `Your OTP for Two factor authciation is: ${otp}`,
+    };
+    console.log(mailOptions);
+    transporter.sendMail(mailOptions, function (error) {
+      if (error) {
+        console.log(error);
+      } else {
+        res.render("layout/2fa", { error: null, email: login.email, dataSiteKey: process.env.RECAPTCHA_SITE_KEY });
+      }
+    });
   } catch (error) {
     console.log(error);
   }
@@ -524,4 +548,9 @@ exports.logout = async function (req, res, next) {
     }
     res.redirect("/loginpage");
   });
+};
+
+exports.errorpage = async function (req, res, next) {
+
+  res.render("layout/404.ejs");
 };

@@ -53,6 +53,7 @@ router.get("/forgotpassword", requireLogout, customercontroller.forgotpassowrd);
 router.post("/email-send", requireLogout, customercontroller.emailsend);
 router.get("/2fa", requireLogout, customercontroller.faPage);
 router.post("/verify", requireLogout, customercontroller.fa);
+router.post("/resendotp", requireLogout, customercontroller.resendotps);
 router.get("/changepassword", customercontroller.changepassword);
 router.post("/resetpassword", customercontroller.resetpassword);
 router.get("/loginpage", requireLogout, customercontroller.loginpage);
@@ -104,5 +105,5 @@ router.post(
   customercontroller.profileresetpassword
 );
 router.get("/logout", customercontroller.logout);
-
+router.get("/errorpage", customercontroller.errorpage);
 module.exports = router;
